@@ -12,8 +12,33 @@ public class Calc {
         return 0.0;
     } 
     
-    public static double sin () {
-        return 0.0;
+    // Input must be in Radians (rad)
+    public static double sin (double numInRad) {
+        double result = numInRad;
+        double numerator = numInRad;
+        double denominator = 1;
+        
+        // Precision up to 3 digits
+        double precision = 0.001;
+        int k = 1;
+        
+        // Approximate Taylor Expansion
+        Long startTime = System.currentTimeMillis();
+        Long resultTime = startTime + 100;
+        while(k != 58) {
+        	denominator = denominator * (2 * k) * (2 * k  + 1);
+        	numerator = numerator * numInRad * numInRad;
+        	double stepValue = numerator / denominator;
+        	if(k % 2 == 0) {
+        		result += stepValue;
+        	}
+        	else {
+        		result -= stepValue;
+        	}
+        	k++;	
+        }
+        
+        return result;
     }
     
     public static double naturalExp () {
@@ -27,8 +52,6 @@ public class Calc {
     public static double sqrt() {
         return 0.0;
     }
-    
-    
 }
 
 
