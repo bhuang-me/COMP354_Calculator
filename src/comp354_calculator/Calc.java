@@ -5,8 +5,10 @@
  */
 package comp354_calculator;
 
+
 /** SUBJECT TO CHANGE */
 public class Calc {
+    private static final double PI = 3.14159265359;
     
     public static double exp (double arg1, double arg2) {
         return 0.0;
@@ -14,31 +16,23 @@ public class Calc {
     
     // Input must be in Radians (rad)
     public static double sin (double numInRad) {
-        double result = numInRad;
-        double numerator = numInRad;
-        double denominator = 1;
-        
-        // Precision up to 3 digits
-        double precision = 0.001;
-        int k = 1;
-        
-        // Approximate Taylor Expansion
-        Long startTime = System.currentTimeMillis();
-        Long resultTime = startTime + 100;
-        while(k != 58) {
-        	denominator = denominator * (2 * k) * (2 * k  + 1);
-        	numerator = numerator * numInRad * numInRad;
-        	double stepValue = numerator / denominator;
-        	if(k % 2 == 0) {
-        		result += stepValue;
-        	}
-        	else {
-        		result -= stepValue;
-        	}
-        	k++;	
-        }
-        
-        return result;
+    	
+    	// convert x to the period from 0 to 360 degrees (0 to 2 * PI rad)
+    	numInRad = numInRad % (2 * PI);
+    	double sum = numInRad;
+    	double step = numInRad;
+    	
+    	// Compute until the value of step is smaller than 9 decimal places
+    	int k = 2;
+    	double accuracy = 0.0000000001;
+    	while(Double.compare(step >= 0 ? step : step * (-1), accuracy) > 0) {
+    		step = (-1) * step * numInRad * numInRad/(k * (k + 1));
+    		sum += step;
+    		k += 2;
+    	}
+    	
+    	// Round result to 6 decimal places
+        return CalcHelper.roundDouble(sum, 6);
     }
     
     public static double naturalExp () {

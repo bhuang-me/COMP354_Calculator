@@ -10,9 +10,13 @@ public class CalcTest {
 	void testSin() {
 		assertEquals(0, Calc.sin(0));
 		assertEquals(0, Calc.sin(Math.PI));
-		assertEquals(-0.958924274, Calc.sin(5));
-		assertEquals(0.259270701, Calc.sin(398.72));
-		assertEquals(0.2592, Calc.sin(398.72));
+		assertEquals(1, Calc.sin(Math.PI / 2));
+		assertEquals(-1, Calc.sin(3 * Math.PI / 2));
+		assertEquals(0.001593, Calc.sin(3.14));
+		assertEquals(-0.958924, Calc.sin(5));
+		assertEquals(0.259271, Calc.sin(398.72));
+		assertEquals(0.992659, Calc.sin(-17.4));
+		assertEquals(-0.084271, Calc.sin(12.482));
 	}
 
 }
