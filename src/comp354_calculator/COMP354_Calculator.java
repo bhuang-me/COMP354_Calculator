@@ -23,7 +23,7 @@ public class COMP354_Calculator extends Application {
     	Parent root = FXMLLoader.load(getClass().getResource("Main_GUI.fxml"));
         Scene scene = new Scene(root);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Calculator (Team B)");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

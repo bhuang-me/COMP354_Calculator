@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -25,13 +26,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" prefHeight="73.0" prefWidth="112.0" text="Button" />
-            <Button fx:id="pi" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="150.0" prefWidth="112.0" text="PI" GridPane.columnIndex="1">
-               <font>
-                  <Font size="21.0" />
-               </font>
-            </Button>
-            <Button fx:id="clear" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="150.0" prefWidth="112.0" text="AC">
+            <Button fx:id="pi" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="68.0" prefWidth="57.0" text="π" GridPane.columnIndex="1">
                <font>
                   <Font size="21.0" />
                </font>
@@ -125,6 +120,27 @@
                <font>
                   <Font size="24.0" />
                </font>
+            </Button>
+            <Button fx:id="clearAll" alignment="CENTER" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="68.0" prefWidth="57.0" text="AC">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Button>
+            <Button fx:id="clear" alignment="CENTER" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="68.0" prefWidth="62.0" text="C">
+               <GridPane.margin>
+                  <Insets left="56.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Button>
+            <Button fx:id="euler" alignment="CENTER" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="68.0" prefWidth="62.0" text="e" GridPane.columnIndex="1">
+               <font>
+                  <Font size="21.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="56.0" />
+               </GridPane.margin>
             </Button>
          </children>
       </GridPane>

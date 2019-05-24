@@ -11,13 +11,21 @@ import javafx.scene.control.TextField;
  *
  */
 public class CalculatorFormController {
+	private static final String PI = "3.14159265359";
+	private static final String EULER = "2.71828182845";
 	public boolean isSinInputInDegrees = false;
 	
 	@FXML
     private Button pi;
 
     @FXML
+    private Button clearAll;
+    
+    @FXML
     private Button clear;
+
+    @FXML
+    private Button euler;
 
     @FXML
     private Button rad_or_deg;
@@ -124,11 +132,20 @@ public class CalculatorFormController {
     			display.setText("-" + display.getText());
     		}
     	}
-    	else if(event.getSource() == clear) {
+    	else if(event.getSource() == clearAll) {
     		display.setText("");
     	}
+    	else if(event.getSource() == clear) {
+    		String txt = display.getText();
+    		if(txt.length() > 0) {
+    			display.setText(txt.substring(0, txt.length() - 1));
+    		}
+    	}
     	else if(event.getSource() == pi) {
-    		display.setText("3.14159265359");
+    		display.setText(PI);
+    	}
+    	else if(event.getSource() == euler) {
+    		display.setText(EULER);
     	}
     	else if(event.getSource() == rad_or_deg) {
     		isSinInputInDegrees = !isSinInputInDegrees;
@@ -149,6 +166,18 @@ public class CalculatorFormController {
     		value = isSinInputInDegrees ? Calc.sin(value, true) : Calc.sin(value, false);
 
     		display.setText(Double.toString(value));
+    	}
+    	else if(event.getSource() == root_of_x) {
+    		double value = Double.parseDouble(display.getText());;
+    		
+    		try {
+    			value = Calc.sqrt(value);
+    			
+    			display.setText(Double.toString(value));
+    		}
+    		catch (IllegalArgumentException e){
+    			display.setText("Error");
+    		}
     	}
     }
 }

@@ -66,7 +66,7 @@ public class Calc {
             res = (res + arg / res) / 2;
         }
         
-        return res;
+        return CalcHelper.roundDouble(res, DECIMAL_PLACE_NUMBER);
     }
 }
 
