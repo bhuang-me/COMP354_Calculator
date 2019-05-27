@@ -20,7 +20,7 @@ public class COMP354_Calculator extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
     	
-    	Parent root = FXMLLoader.load(getClass().getResource("Main_GUI.fxml"));
+    	Parent root = FXMLLoader.load(getClass().getResource("CalculatorForm.fxml"));
         Scene scene = new Scene(root);
         
         primaryStage.setTitle("Calculator (Team B)");

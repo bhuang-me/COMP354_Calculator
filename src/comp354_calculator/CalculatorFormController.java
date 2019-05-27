@@ -3,7 +3,9 @@ package comp354_calculator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 
 /**
  * Control events in Calculator form(Main_GUI)
@@ -11,48 +13,25 @@ import javafx.scene.control.TextField;
  *
  */
 public class CalculatorFormController {
-	private static final String PI = "3.14159265359";
-	private static final String EULER = "2.71828182845";
-	public boolean isSinInputInDegrees = false;
+	private static final String PI = "3.1415926535";
+	private static final String EULER = "2.7182818284";
+	private static final String INPUT_DEGREES = "Degrees";
+	private static double firstOperand;
 	
-	@FXML
-    private Button pi;
+	private enum Operation{Add, Subtract, Div, Mult};
+	private static Operation  executeOperation;
+	
+    @FXML
+    private TextField display;
 
     @FXML
-    private Button clearAll;
-    
-    @FXML
-    private Button clear;
+    private Button dot;
 
     @FXML
-    private Button euler;
+    private Button plus;
 
     @FXML
-    private Button rad_or_deg;
-
-    @FXML
-    private Button seven;
-
-    @FXML
-    private Button eight;
-
-    @FXML
-    private Button nine;
-
-    @FXML
-    private Button root_of_x;
-
-    @FXML
-    private Button four;
-
-    @FXML
-    private Button five;
-
-    @FXML
-    private Button six;
-
-    @FXML
-    private Button ten_to_x;
+    private Button equals;
 
     @FXML
     private Button one;
@@ -64,22 +43,73 @@ public class CalculatorFormController {
     private Button three;
 
     @FXML
-    private Button e_to_x;
-
-    @FXML
-    private Button zero;
-
-    @FXML
-    private Button dot;
+    private Button minus;
 
     @FXML
     private Button plus_or_minus;
 
     @FXML
-    private Button sin;
-    
+    private Button four;
+
     @FXML
-    private TextField display;
+    private Button five;
+
+    @FXML
+    private Button six;
+
+    @FXML
+    private Button multiply;
+
+    @FXML
+    private Button euler;
+
+    @FXML
+    private Button seven;
+
+    @FXML
+    private Button eight;
+
+    @FXML
+    private Button nine;
+
+    @FXML
+    private Button divide;
+
+    @FXML
+    private Button pi;
+
+    @FXML
+    private Button zero;
+
+    @FXML
+    private Button sin;
+
+    @FXML
+    private Button sinh;
+
+    @FXML
+    private Button ten_to_x;
+
+    @FXML
+    private Button e_to_x;
+
+    @FXML
+    private Button root_of_x;
+
+    @FXML
+    private Button clearAll;
+
+    @FXML
+    private Button clear;
+
+    @FXML
+    private RadioButton radians;
+
+    @FXML
+    private ToggleGroup input_type;
+
+    @FXML
+    private RadioButton degrees;
     
     @FXML
     protected void handleButtonAction(ActionEvent event) {
@@ -147,23 +177,61 @@ public class CalculatorFormController {
     	else if(event.getSource() == euler) {
     		display.setText(EULER);
     	}
-    	else if(event.getSource() == rad_or_deg) {
-    		isSinInputInDegrees = !isSinInputInDegrees;
-    		if(isSinInputInDegrees) {
-    			display.setText("deg");
-    		}
-    		else {
-    			display.setText("rad");
+    	else if(event.getSource() == plus && display.getText().length() != 0) {
+    		firstOperand = Double.parseDouble(display.getText());
+    		executeOperation = Operation.Add;
+    		display.setText(display.getText() + " + ");
+    	}
+    	else if(event.getSource() == minus && display.getText().length() != 0) {
+    		firstOperand = Double.parseDouble(display.getText());
+    		executeOperation = Operation.Subtract;
+    		display.setText(display.getText() + " - ");
+    	}
+    	else if(event.getSource() == divide && display.getText().length() != 0) {
+    		firstOperand = Double.parseDouble(display.getText());
+    		executeOperation = Operation.Div;
+    		display.setText(display.getText() + " / ");
+    	}
+    	else if(event.getSource() == multiply && display.getText().length() != 0) {
+    		firstOperand = Double.parseDouble(display.getText());
+    		executeOperation = Operation.Mult;
+    		display.setText(display.getText() + " * ");
+    	}
+    	else if(event.getSource() == equals) {
+    		double secondOperand = CalculatorFormControllerHelper.processOperationInput(
+    				display.getText(), executeOperation);
+    		
+    		switch(executeOperation) {
+    			case Add:
+    				display.setText(Double.toString(firstOperand + secondOperand));
+    				break;
+    			case Subtract:
+    				display.setText(Double.toString(firstOperand - secondOperand));
+    				break;
+    			case Div:
+    				try {
+    					if(Double.compare(secondOperand, 0) == 0) {
+    						throw new ArithmeticException();
+    					}
+    					display.setText(Double.toString(firstOperand / secondOperand));
+    				}
+    				catch(ArithmeticException  e){
+    					display.setText("Division by zero");
+    				}
+    				break;
+    			case Mult:
+    				display.setText(Double.toString(firstOperand * secondOperand));
+    				break;
     		}
     	}
-    	
     	// Transcendental  functions
     	else if(event.getSource() == sin) {
     		double value = 0.0;
-    		
+    		RadioButton selectedRadioButton = (RadioButton) input_type.getSelectedToggle();
+    		String toogleGroupValue = selectedRadioButton.getText();
     		value = Double.parseDouble(display.getText());
     		
-    		value = isSinInputInDegrees ? Calc.sin(value, true) : Calc.sin(value, false);
+    		value = toogleGroupValue.equals(INPUT_DEGREES) ? Calc.sin(value, true) : Calc.sin(value, false);
 
     		display.setText(Double.toString(value));
     	}
@@ -178,6 +246,25 @@ public class CalculatorFormController {
     		catch (IllegalArgumentException e){
     			display.setText("Error");
     		}
+    	}
+    }
+    
+    // Inner class for the form helpers
+    private static class CalculatorFormControllerHelper{
+    	
+    	// Preprocess text for +, -, *, / operations
+    	private static double processOperationInput(String input, Operation oper) {
+    		switch(executeOperation) {
+				case Add:
+					return Double.parseDouble(input.split("\\+")[1].substring(1));
+				case Subtract:
+					return Double.parseDouble(input.split("-")[1].substring(1));
+				case Div:
+					return Double.parseDouble(input.split("/")[1].substring(1));
+				case Mult:
+					return Double.parseDouble(input.split("\\*")[1].substring(1));
+    		}
+    		return 0.0;
     	}
     }
 }
