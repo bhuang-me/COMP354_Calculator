@@ -19,4 +19,14 @@ public class CalcTest {
 		assertEquals(-0.084271, Calc.sin(12.482));
 	}
 
+	@Test
+	void testSinh() {
+		assertEquals(0, Calc.sinh(0));
+		assertEquals(11.530292, Calc.sinh(3.14));
+		assertEquals(-74.203211, Calc.sinh(-5));
+		assertEquals(11.548739, Calc.sinh(Math.PI));
+		assertEquals(201.713157, Calc.sinh(6));
+		assertEquals(11013.232875, Calc.sinh(10));
+	}
+
 }

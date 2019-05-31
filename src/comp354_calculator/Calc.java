@@ -34,6 +34,22 @@ public class Calc {
     	// Round result to 6 decimal places
         return CalcHelper.roundDouble(sum, 6);
     }
+
+    public static double sinh (double numInRad) {
+        double sum = numInRad;
+        double step = numInRad;
+
+        int k = 2;
+        double accuracy = 0.0000000001;
+
+        while (Double.compare(step >= 0 ? step : step * (-1), accuracy) > 0){
+            step = step * numInRad * numInRad/(k * (k + 1));
+            sum += step;
+            k += 2;
+        }
+
+        return CalcHelper.roundDouble(sum, 6);
+    }
     
     public static double naturalExp () {
         return 0.0;
