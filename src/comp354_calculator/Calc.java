@@ -79,6 +79,22 @@ public class Calc {
         
         return res;
     }
+    
+    /* Insert an x value and e^x will be calculated through use of the Taylor Series to arrive at an approximate value */
+	public static float exponential(float x) 
+	{
+		//Pass in value to be calculated
+		float taylorSum = 1;
+		
+		int i;
+		
+		for (i = 29; i > 0; --i )
+		{
+			taylorSum = 1 + x * taylorSum / i;
+		}
+		
+		return taylorSum;
+	}
 }
 
 
