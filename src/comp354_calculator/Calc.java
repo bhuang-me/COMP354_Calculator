@@ -34,6 +34,22 @@ public class Calc {
     	// Round result to 6 decimal places
         return CalcHelper.roundDouble(sum, 6);
     }
+
+    public static double sinh (double numInRad) {
+        double sum = numInRad;
+        double step = numInRad;
+
+        int k = 2;
+        double accuracy = 0.0000000001;
+
+        while (Double.compare(step >= 0 ? step : step * (-1), accuracy) > 0){
+            step = step * numInRad * numInRad/(k * (k + 1));
+            sum += step;
+            k += 2;
+        }
+
+        return CalcHelper.roundDouble(sum, 6);
+    }
     
     public static double naturalExp () {
         return 0.0;
@@ -63,6 +79,22 @@ public class Calc {
         
         return res;
     }
+    
+    /* Insert an x value and e^x will be calculated through use of the Taylor Series to arrive at an approximate value */
+	public static float exponential(float x) 
+	{
+		//Pass in value to be calculated
+		float taylorSum = 1;
+		
+		int i;
+		
+		for (i = 29; i > 0; --i )
+		{
+			taylorSum = 1 + x * taylorSum / i;
+		}
+		
+		return taylorSum;
+	}
 }
 
 
