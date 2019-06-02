@@ -56,7 +56,31 @@ public class Calc {
     }
     
     public static double decimalExp (double power) {
-        return exp(10, power);
+		double sum=1;
+		double step=1;
+		double factorial=1;
+		final double LN10VALUE=2.302585092994046;
+		double accuracy=0.0000000001;
+		double temp=exponent;
+		
+		if(temp<0) {
+			exponent*=-1;
+		}
+		
+		while(Double.compare(step, accuracy)>0) {
+			step=step*LN10VALUE*exponent/factorial;
+			sum=sum+step;
+			factorial++;
+		}
+		
+		if(temp<0) {
+			sum=1.0/sum;
+		}
+		
+		if(sum>=1.0E100) 
+			throw new ArithmeticException("Error 2");
+		
+		return CalcHelper.roundDouble(sum, 6);
     }
     
     public static double sqrt(double arg) {
