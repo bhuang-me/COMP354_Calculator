@@ -51,8 +51,7 @@ public class Calc {
             sum += step;
             k += 2;
         }
-
-        return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER); // Can not use CalcHelper.roundDouble
+        return CalcHelper.roundDoubleNoScientificNotation(sum, DECIMAL_PLACE_NUMBER);
     }
     
     public static double decimalExp (double power) {
@@ -62,17 +61,17 @@ public class Calc {
 		final double LN10VALUE=2.302585092994046;
 		double accuracy=0.0000000001;
 		double temp=power;
-		
+
 		if(temp<0) {
 			power*=-1;
 		}
-		
+
 		while(Double.compare(step, accuracy)>0) {
 			step=step*LN10VALUE*power/factorial;
 			sum=sum+step;
 			factorial++;
 		}
-		
+
 		if(temp<0) {
 			sum=1.0/sum;
 		}
