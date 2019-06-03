@@ -10,7 +10,7 @@ package comp354_calculator;
 public class Calc {
     private static final double PI = 3.14159265359;
     private static final int DECIMAL_PLACE_NUMBER = 9;
-    private static final double SIN_SINH_ACCURACY = 0.0000000001;
+    private static final double ACCURACY = 0.0000000001;
     
     public static double sin (double num, boolean isNumDegree) {
     	// Convert to Radian if inout is in Degrees
@@ -25,7 +25,7 @@ public class Calc {
     	
     	// Compute until the value of step is smaller than 9 decimal places
     	int k = 2;
-    	while(Double.compare(step >= 0 ? step : step * (-1), SIN_SINH_ACCURACY) > 0) {
+    	while(Double.compare(step >= 0 ? step : step * (-1), ACCURACY) > 0) {
     		step = (-1) * step * num * num/(k * (k + 1));
     		sum += step;
     		k += 2;
@@ -46,12 +46,12 @@ public class Calc {
 
         int k = 2;
 
-        while (Double.compare(step >= 0 ? step : step * (-1), SIN_SINH_ACCURACY) > 0){
+        while (Double.compare(step >= 0 ? step : step * (-1), ACCURACY) > 0){
             step = step * num * num/(k * (k + 1));
             sum += step;
             k += 2;
         }
-        return CalcHelper.roundDoubleNoScientificNotation(sum, DECIMAL_PLACE_NUMBER);
+        return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
     }
     
     public static double decimalExp (double power) {
@@ -80,7 +80,7 @@ public class Calc {
 			throw new ArithmeticException("Error 2");
 		}
 		
-		return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER); // Can not use CalcHelper.roundDouble
+		return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
     }
     
     public static double sqrt(double arg) {
@@ -115,14 +115,15 @@ public class Calc {
     
 	    else
 	    {	
-			int i;
+			int i = 1;
+			double step = 1;
 			
 			//Taylor series is calculated through looping this equation i times 
-			
-			for (i = 29; i > 0; --i )
-			{
-				taylorSum = 1 + x * taylorSum / i;
-			}
+	        while (Double.compare(step >= 0 ? step : step * (-1), ACCURACY) > 0){
+	        	step = step * x / i;
+	        	taylorSum += step;
+	        	i++;
+	        }
 			
 			//We must include exception handling when the result of the calculation is positive infinity to prevent the computer from running infinitely
 			//which would overflow the system 
