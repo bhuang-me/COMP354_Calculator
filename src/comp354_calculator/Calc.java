@@ -55,7 +55,7 @@ public class Calc {
             k += 2;
         }
 
-        return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
+        return CalcHelper.roundDoubleNoScientificNotation(sum, DECIMAL_PLACE_NUMBER);
     }
     
     public static double naturalExp () {
@@ -69,17 +69,17 @@ public class Calc {
 		final double LN10VALUE=2.302585092994046;
 		double accuracy=0.0000000001;
 		double temp=exponent;
-		
+
 		if(temp<0) {
 			exponent*=-1;
 		}
-		
+
 		while(Double.compare(step, accuracy)>0) {
 			step=step*LN10VALUE*exponent/factorial;
 			sum=sum+step;
 			factorial++;
 		}
-		
+
 		if(temp<0) {
 			sum=1.0/sum;
 		}
