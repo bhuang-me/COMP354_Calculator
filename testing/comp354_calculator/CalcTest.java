@@ -27,6 +27,8 @@ public class CalcTest {
 		assertEquals(11.548739, Calc.sinh(Math.PI, false));
 		assertEquals(201.713157, Calc.sinh(6, false));
 		assertEquals(11013.232875, Calc.sinh(10, false));
+		assertEquals(5343237290762.231445, Calc.sinh(30, false));
+
 	}
 
 }
