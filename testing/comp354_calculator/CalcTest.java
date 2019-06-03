@@ -21,12 +21,12 @@ public class CalcTest {
 
 	@Test
 	void testSinh() {
-		assertEquals(0, Calc.sinh(0));
-		assertEquals(11.530292, Calc.sinh(3.14));
-		assertEquals(-74.203211, Calc.sinh(-5));
-		assertEquals(11.548739, Calc.sinh(Math.PI));
-		assertEquals(201.713157, Calc.sinh(6));
-		assertEquals(11013.232875, Calc.sinh(10));
+		assertEquals(0, Calc.sinh(0, false));
+		assertEquals(11.530292, Calc.sinh(3.14, false));
+		assertEquals(-74.203211, Calc.sinh(-5, false));
+		assertEquals(11.548739, Calc.sinh(Math.PI, false));
+		assertEquals(201.713157, Calc.sinh(6, false));
+		assertEquals(11013.232875, Calc.sinh(10, false));
 	}
 
 }

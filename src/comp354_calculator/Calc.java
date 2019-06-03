@@ -9,6 +9,8 @@ package comp354_calculator;
 /** SUBJECT TO CHANGE */
 public class Calc {
     private static final double PI = 3.14159265359;
+    private static final int DECIMAL_PLACE_NUMBER = 6;
+    private static final double SINH_ACCURACY = 0.0000000001;
     
     public static double exp (double arg1, double arg2) {
         return 0.0;
@@ -35,20 +37,25 @@ public class Calc {
         return CalcHelper.roundDouble(sum, 6);
     }
 
-    public static double sinh (double numInRad) {
-        double sum = numInRad;
-        double step = numInRad;
+    public static double sinh (double num, boolean isNumDegree) {
+
+        // Convert to Radian if inout is in Degrees
+        if(isNumDegree) {
+            num = num * PI / 180;
+        }
+
+        double sum = num;
+        double step = num;
 
         int k = 2;
-        double accuracy = 0.0000000001;
 
-        while (Double.compare(step >= 0 ? step : step * (-1), accuracy) > 0){
-            step = step * numInRad * numInRad/(k * (k + 1));
+        while (Double.compare(step >= 0 ? step : step * (-1), SINH_ACCURACY) > 0){
+            step = step * num * num/(k * (k + 1));
             sum += step;
             k += 2;
         }
 
-        return CalcHelper.roundDouble(sum, 6);
+        return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
     }
     
     public static double naturalExp () {
