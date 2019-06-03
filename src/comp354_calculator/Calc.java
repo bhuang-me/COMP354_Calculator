@@ -80,20 +80,38 @@ public class Calc {
         return res;
     }
     
-    /* Insert an x value and e^x will be calculated through use of the Taylor Series to arrive at an approximate value */
-	public static float exponential(float x) 
+	/* Insert an x value and e^x will be calculated through use of the Taylor Series to arrive at an approximate value */
+	public static double exponential(double x)
 	{
-		//Pass in value to be calculated
-		float taylorSum = 1;
 		
-		int i;
+		double taylorSum = 1;
 		
-		for (i = 29; i > 0; --i )
-		{
-			taylorSum = 1 + x * taylorSum / i;
+		if (x == 0)
+			return taylorSum;
+    
+	    else
+	    {	
+			int i;
+			
+			//Taylor series is calculated through looping this equation i times 
+			
+			for (i = 29; i > 0; --i )
+			{
+				taylorSum = 1 + x * taylorSum / i;
+			}
+			
+			//We must include exception handling when the result of the calculation is positive infinity to prevent the computer from running infinitely
+			//which would overflow the system 
+			
+			if(taylorSum == Double.POSITIVE_INFINITY) 
+				
+	            throw new ArithmeticException("x value has overloaded system");
+			
+	        else
+	       
+	        	return taylorSum;
 		}
 		
-		return taylorSum;
 	}
 }
 
