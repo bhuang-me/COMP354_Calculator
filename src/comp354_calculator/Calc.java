@@ -9,32 +9,29 @@ package comp354_calculator;
 /** SUBJECT TO CHANGE */
 public class Calc {
     private static final double PI = 3.14159265359;
-    private static final int DECIMAL_PLACE_NUMBER = 6;
-    private static final double SINH_ACCURACY = 0.0000000001;
+    private static final int DECIMAL_PLACE_NUMBER = 9;
+    private static final double ACCURACY = 0.0000000001;
     
-    public static double exp (double arg1, double arg2) {
-        return 0.0;
-    } 
-    
-    // Input must be in Radians (rad)
-    public static double sin (double numInRad) {
-    	
+    public static double sin (double num, boolean isNumDegree) {
+    	// Convert to Radian if inout is in Degrees
+    	if(isNumDegree) {
+    		num = num * PI / 180;
+    	}
+    		
     	// convert x to the period from 0 to 360 degrees (0 to 2 * PI rad)
-    	numInRad = numInRad % (2 * PI);
-    	double sum = numInRad;
-    	double step = numInRad;
+    	num = num % (2 * PI);
+    	double sum = num;
+    	double step = num;
     	
     	// Compute until the value of step is smaller than 9 decimal places
     	int k = 2;
-    	double accuracy = 0.0000000001;
-    	while(Double.compare(step >= 0 ? step : step * (-1), accuracy) > 0) {
-    		step = (-1) * step * numInRad * numInRad/(k * (k + 1));
+    	while(Double.compare(step >= 0 ? step : step * (-1), ACCURACY) > 0) {
+    		step = (-1) * step * num * num/(k * (k + 1));
     		sum += step;
     		k += 2;
     	}
     	
-    	// Round result to 6 decimal places
-        return CalcHelper.roundDouble(sum, 6);
+        return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
     }
 
     public static double sinh (double num, boolean isNumDegree) {
@@ -49,17 +46,12 @@ public class Calc {
 
         int k = 2;
 
-        while (Double.compare(step >= 0 ? step : step * (-1), SINH_ACCURACY) > 0){
+        while (Double.compare(step >= 0 ? step : step * (-1), ACCURACY) > 0){
             step = step * num * num/(k * (k + 1));
             sum += step;
             k += 2;
         }
-
-        return CalcHelper.roundDoubleNoScientificNotation(sum, DECIMAL_PLACE_NUMBER);
-    }
-    
-    public static double naturalExp () {
-        return 0.0;
+        return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
     }
     
     public static double decimalExp (double power) {
@@ -68,14 +60,14 @@ public class Calc {
 		double factorial=1;
 		final double LN10VALUE=2.302585092994046;
 		double accuracy=0.0000000001;
-		double temp=exponent;
+		double temp=power;
 
 		if(temp<0) {
-			exponent*=-1;
+			power*=-1;
 		}
 
 		while(Double.compare(step, accuracy)>0) {
-			step=step*LN10VALUE*exponent/factorial;
+			step=step*LN10VALUE*power/factorial;
 			sum=sum+step;
 			factorial++;
 		}
@@ -84,10 +76,11 @@ public class Calc {
 			sum=1.0/sum;
 		}
 		
-		if(sum>=1.0E100) 
+		if(sum>=1.0E100) {
 			throw new ArithmeticException("Error 2");
+		}
 		
-		return CalcHelper.roundDouble(sum, 6);
+		return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
     }
     
     public static double sqrt(double arg) {
@@ -108,7 +101,7 @@ public class Calc {
             res = (res + arg / res) / 2;
         }
         
-        return res;
+        return CalcHelper.roundDouble(res, DECIMAL_PLACE_NUMBER);
     }
     
     /* Insert an x value and e^x will be calculated through use of the Taylor Series to arrive at an approximate value */
@@ -122,14 +115,15 @@ public class Calc {
     
 	    else
 	    {	
-			int i;
+			int i = 1;
+			double step = 1;
 			
 			//Taylor series is calculated through looping this equation i times 
-			
-			for (i = 29; i > 0; --i )
-			{
-				taylorSum = 1 + x * taylorSum / i;
-			}
+	        while (Double.compare(step >= 0 ? step : step * (-1), ACCURACY) > 0){
+	        	step = step * x / i;
+	        	taylorSum += step;
+	        	i++;
+	        }
 			
 			//We must include exception handling when the result of the calculation is positive infinity to prevent the computer from running infinitely
 			//which would overflow the system 
@@ -139,7 +133,7 @@ public class Calc {
 	            throw new ArithmeticException("x value has overloaded system");
 			
 	        else
-	        	return taylorSum;
+	        	return CalcHelper.roundDouble(taylorSum, DECIMAL_PLACE_NUMBER); // Can not use CalcHelper.roundDouble
 		}
 		
 	}

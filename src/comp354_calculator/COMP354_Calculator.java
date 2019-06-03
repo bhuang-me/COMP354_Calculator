@@ -6,11 +6,9 @@
 package comp354_calculator;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -20,23 +18,12 @@ import javafx.stage.Stage;
 public class COMP354_Calculator extends Application {
     
     @Override
-    public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
+    public void start(Stage primaryStage) throws Exception{
+    	
+    	Parent root = FXMLLoader.load(getClass().getResource("CalculatorForm.fxml"));
+        Scene scene = new Scene(root);
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Calculator (Team B)");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
