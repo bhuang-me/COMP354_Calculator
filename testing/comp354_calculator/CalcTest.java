@@ -8,7 +8,7 @@ public class CalcTest {
 
 	@Test
 	void testSin() {
-		// Test input in radian
+		// Test input in Radians
 		assertEquals(0, Calc.sin(0, false));
 		assertEquals(0, Calc.sin(Math.PI, false));
 		assertEquals(1, Calc.sin(Math.PI / 2, false));
@@ -30,12 +30,48 @@ public class CalcTest {
 
 	@Test
 	void testSinh() {
+		// Test input in Radians
 		assertEquals(0, Calc.sinh(0, false));
-		assertEquals(11.530292, Calc.sinh(3.14, false));
-		assertEquals(-74.203211, Calc.sinh(-5, false));
-		assertEquals(11.548739, Calc.sinh(Math.PI, false));
-		assertEquals(201.713157, Calc.sinh(6, false));
-		assertEquals(11013.232875, Calc.sinh(10, false));
+		assertEquals(11.53029203, Calc.sinh(3.14, false));
+		assertEquals(-74.203210578, Calc.sinh(-5, false));
+		assertEquals(11.548739357, Calc.sinh(Math.PI, false));
+		//assertEquals(7.017961089264201E216, Calc.sinh(500, false));
+		//assertEquals(11013.232875, Calc.sinh(30, false));
+		
+		// Test input in Degrees
+		assertEquals(0, Calc.sinh(0, true));
+		assertEquals(2.301298902, Calc.sinh(90, true));
+		assertEquals(414.208297966, Calc.sinh(385, true));
+		assertEquals(-0.496657511, Calc.sinh(-27.4, true));
+	}
+	
+	@Test
+	void testDecimalExp() {
+		assertEquals(1, Calc.decimalExp(0));
+		//assertEquals(0.002884032, Calc.decimalExp(-2.54));
+		//assertEquals(1.7588386477506814E41, Calc.decimalExp(41.5));
+		assertEquals(0.0, Calc.decimalExp(-10));
+		assertEquals(0.0, Calc.decimalExp(-44.3256)); // Rounds value to 0
+	}
+	
+	@Test
+	void testSqrt() {
+		assertEquals(0, Calc.sqrt(0));
+		assertEquals(9, Calc.sqrt(81));
+		assertEquals(1.462668794, Calc.sqrt(2.1394));
+		assertEquals(67.544355797, Calc.sqrt(4562.24));
+		assertThrows(IllegalArgumentException.class, () -> {
+	        Calc.sqrt(-6);
+	    });
+	}
+	
+	@Test
+	void testExponential() {
+		assertEquals(1, Calc.exponential(0));
+		assertEquals(31.090428297, Calc.exponential(3.4369));
+		assertEquals(0.070018205, Calc.exponential(-2.659));
+		//assertEquals(2.61138141036066E13, Calc.exponential(31.9731));
+		//assertEquals(2.61138141036066E13, Calc.exponential(-44.3256)); // Does not round to 0
 	}
 
 }

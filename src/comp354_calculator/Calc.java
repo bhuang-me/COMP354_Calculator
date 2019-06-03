@@ -12,11 +12,6 @@ public class Calc {
     private static final int DECIMAL_PLACE_NUMBER = 9;
     private static final double SIN_SINH_ACCURACY = 0.0000000001;
     
-    public static double exp (double arg1, double arg2) {
-        return 0.0;
-    } 
-    
-    
     public static double sin (double num, boolean isNumDegree) {
     	// Convert to Radian if inout is in Degrees
     	if(isNumDegree) {
@@ -36,7 +31,6 @@ public class Calc {
     		k += 2;
     	}
     	
-    	// Round result to 6 decimal places
         return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
     }
 
@@ -58,11 +52,7 @@ public class Calc {
             k += 2;
         }
 
-        return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
-    }
-    
-    public static double naturalExp () {
-        return 0.0;
+        return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER); // Can not use CalcHelper.roundDouble
     }
     
     public static double decimalExp (double power) {
@@ -87,10 +77,11 @@ public class Calc {
 			sum=1.0/sum;
 		}
 		
-		if(sum>=1.0E100) 
+		if(sum>=1.0E100) {
 			throw new ArithmeticException("Error 2");
+		}
 		
-		return CalcHelper.roundDouble(sum, 6);
+		return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER); // Can not use CalcHelper.roundDouble
     }
     
     public static double sqrt(double arg) {
@@ -142,7 +133,7 @@ public class Calc {
 	            throw new ArithmeticException("x value has overloaded system");
 			
 	        else
-	        	return taylorSum;
+	        	return CalcHelper.roundDouble(taylorSum, DECIMAL_PLACE_NUMBER); // Can not use CalcHelper.roundDouble
 		}
 		
 	}

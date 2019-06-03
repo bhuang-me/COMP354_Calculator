@@ -235,6 +235,40 @@ public class CalculatorFormController {
 
     		display.setText(Double.toString(value));
     	}
+    	else if(event.getSource() == sinh) {
+    		double value = 0.0;
+    		RadioButton selectedRadioButton = (RadioButton) input_type.getSelectedToggle();
+    		String toogleGroupValue = selectedRadioButton.getText();
+    		value = Double.parseDouble(display.getText());
+    		
+    		value = toogleGroupValue.equals(INPUT_DEGREES) ? Calc.sinh(value, true) : Calc.sinh(value, false);
+
+    		display.setText(Double.toString(value));
+    	}
+    	else if(event.getSource() == e_to_x) {
+    		double value = Double.parseDouble(display.getText());;
+    		
+    		try {
+    			value = Calc.exponential(value);
+        		
+        		display.setText(Double.toString(value));
+    		}
+    		catch(ArithmeticException e) {
+    			display.setText("Infinity");
+    		}	
+    	}
+    	else if(event.getSource() == ten_to_x) {
+    		double value = Double.parseDouble(display.getText());
+
+    		try {
+    			value = Calc.decimalExp(value);
+        		
+        		display.setText(Double.toString(value));
+    		}
+    		catch(ArithmeticException e) {
+    			display.setText("Infinity");
+    		}
+    	}
     	else if(event.getSource() == root_of_x) {
     		double value = Double.parseDouble(display.getText());;
     		
