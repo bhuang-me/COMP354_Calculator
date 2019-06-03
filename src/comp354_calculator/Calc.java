@@ -56,31 +56,7 @@ public class Calc {
     }
     
     public static double decimalExp (double power) {
-		double sum=1;
-		double step=1;
-		double factorial=1;
-		final double LN10VALUE=2.302585092994046;
-		double accuracy=0.0000000001;
-		double temp=exponent;
-		
-		if(temp<0) {
-			exponent*=-1;
-		}
-		
-		while(Double.compare(step, accuracy)>0) {
-			step=step*LN10VALUE*exponent/factorial;
-			sum=sum+step;
-			factorial++;
-		}
-		
-		if(temp<0) {
-			sum=1.0/sum;
-		}
-		
-		if(sum>=1.0E100) 
-			throw new ArithmeticException("Error 2");
-		
-		return CalcHelper.roundDouble(sum, 6);
+        return exp(10, power);
     }
     
     public static double sqrt(double arg) {
@@ -104,20 +80,36 @@ public class Calc {
         return res;
     }
     
-    /* Insert an x value and e^x will be calculated through use of the Taylor Series to arrive at an approximate value */
-	public static float exponential(float x) 
+	/* Insert an x value and e^x will be calculated through use of the Taylor Series to arrive at an approximate value */
+	public static double exponential(double x)
 	{
-		//Pass in value to be calculated
-		float taylorSum = 1;
 		
-		int i;
+		double taylorSum = 1;
 		
-		for (i = 29; i > 0; --i )
-		{
-			taylorSum = 1 + x * taylorSum / i;
+		if (x == 0)
+			return taylorSum;
+    
+	    else
+	    {	
+			int i;
+			
+			//Taylor series is calculated through looping this equation i times 
+			
+			for (i = 29; i > 0; --i )
+			{
+				taylorSum = 1 + x * taylorSum / i;
+			}
+			
+			//We must include exception handling when the result of the calculation is positive infinity to prevent the computer from running infinitely
+			//which would overflow the system 
+			
+			if(taylorSum == Double.POSITIVE_INFINITY) 
+	            throw new ArithmeticException("x value has overloaded system");
+			
+	        else
+	        	return taylorSum;
 		}
 		
-		return taylorSum;
 	}
 }
 
