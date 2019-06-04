@@ -5,7 +5,6 @@ import java.math.RoundingMode;
 
 public class CalcHelper {
 	private static final char SCIENTIFIC_NOTATION_E = 'E';
-	private static final int ADD_PLACES_FOR_SCIENTIFIC_NOTATION = 2;
 	
 	// Round Double value to specific number of decimal places
 	// NOTE: Even cases are rounded UP
@@ -16,23 +15,20 @@ public class CalcHelper {
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         
         return isInputPositiveScientific(value) ? 
-        		processScientificNotation(value, places + ADD_PLACES_FOR_SCIENTIFIC_NOTATION) : bd.doubleValue();
+        		processScientificNotation(value, places) : bd.doubleValue();
     }
-
-    //We put the cutoff for the display of the value to 9 decimal places
-    public static final int MAX_LENGTH = 9;
 	
-    private static double processScientificNotation(double number) {
+    private static double processScientificNotation(double number, int maxLength) {
 	    
 	      String out = null;
 		   
-	      for (int i = 0; i < MAX_LENGTH; i++) 
+	      for (int i = 0; i < maxLength; i++) 
 	      {
 	         String format = "%." + i + "G";
 	         out = String.format(format, number);
 	      }
 		   
-	      return out;
+	      return Double.parseDouble(out);
     }
     
     private static boolean isInputPositiveScientific(double input) {
