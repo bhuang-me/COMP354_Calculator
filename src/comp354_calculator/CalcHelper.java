@@ -19,12 +19,20 @@ public class CalcHelper {
         		processScientificNotation(value, places + ADD_PLACES_FOR_SCIENTIFIC_NOTATION) : bd.doubleValue();
     }
 
-    private static double processScientificNotation(double input, int places) {
-		String inputStr = Double.toString(input);
-		int idx = inputStr.indexOf(SCIENTIFIC_NOTATION_E);
-		
-		String ans = inputStr.substring(0, places) + inputStr.substring(idx);
-		return Double.parseDouble(ans);
+    //We put the cutoff for the display of the value to 9 decimal places
+    public static final int MAX_LENGTH = 9;
+	
+    private static double processScientificNotation(double number) {
+	    
+	      String out = null;
+		   
+	      for (int i = 0; i < MAX_LENGTH; i++) 
+	      {
+	         String format = "%." + i + "G";
+	         out = String.format(format, number);
+	      }
+		   
+	      return out;
     }
     
     private static boolean isInputPositiveScientific(double input) {
