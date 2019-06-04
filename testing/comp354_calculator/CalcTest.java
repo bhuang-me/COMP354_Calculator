@@ -35,8 +35,8 @@ public class CalcTest {
 		assertEquals(11.53029203, Calc.sinh(3.14, false));
 		assertEquals(-74.203210578, Calc.sinh(-5, false));
 		assertEquals(11.548739357, Calc.sinh(Math.PI, false));
-		assertEquals(7.017961089E216, Calc.sinh(500, false));
-		assertEquals(5.34323729E12, Calc.sinh(30, false));
+		assertEquals(7.0179611E216, Calc.sinh(500, false));
+		assertEquals(5.3432373E12, Calc.sinh(30, false));
 		
 		// Test input in Degrees
 		assertEquals(0, Calc.sinh(0, true));
@@ -49,7 +49,7 @@ public class CalcTest {
 	void testDecimalExp() {
 		assertEquals(1, Calc.decimalExp(0));
 		assertEquals(0.002884032, Calc.decimalExp(-2.54));
-		assertEquals(3.16227766E41, Calc.decimalExp(41.5));
+		assertEquals(3.1622777E41, Calc.decimalExp(41.5));
 		assertEquals(0.0, Calc.decimalExp(-10));
 		assertEquals(0.0, Calc.decimalExp(-44.3256)); // Rounds to 0 too fast
 	}
@@ -70,8 +70,8 @@ public class CalcTest {
 		assertEquals(1, Calc.exponential(0));
 		assertEquals(31.090428297, Calc.exponential(3.4369));
 		assertEquals(0.070018205, Calc.exponential(-2.659));
-		assertEquals(5.834617425E14, Calc.exponential(34));
-		assertEquals(2.61138141036066E13, Calc.exponential(172.39)); // Does not round to 0
+		assertEquals(5.8346174E14, Calc.exponential(34));
+		assertEquals(7.3794796E74, Calc.exponential(172.39)); // Does not round to 0
 	}
 
 }
