@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -14,10 +15,13 @@
 
 <AnchorPane prefHeight="442.0" prefWidth="447.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="comp354_calculator.CalculatorFormController">
    <children>
-      <TextField fx:id="display" alignment="CENTER_RIGHT" editable="false" onAction="#handleButtonAction" prefHeight="105.0" prefWidth="449.0">
+      <TextField fx:id="display" alignment="CENTER_RIGHT" editable="false" minHeight="0.0" minWidth="0.0" onAction="#handleButtonAction" prefHeight="101.0" prefWidth="449.0">
          <font>
-            <Font size="48.0" />
+            <Font size="45.0" />
          </font>
+         <padding>
+            <Insets right="1.0" top="50.0" />
+         </padding>
       </TextField>
       <GridPane layoutY="105.0" prefHeight="339.0" prefWidth="449.0">
         <columnConstraints>
@@ -188,6 +192,13 @@
             </HBox>
          </children>
       </GridPane>
-      <HBox layoutX="81.0" layoutY="29.0" prefHeight="56.0" prefWidth="135.0" />
+      <Label fx:id="smallDisplay" alignment="CENTER_RIGHT" layoutX="101.0" layoutY="1.0" onDragDetected="#handleButtonAction" prefHeight="39.0" prefWidth="348.0">
+         <font>
+            <Font size="25.0" />
+         </font>
+         <padding>
+            <Insets right="2.0" />
+         </padding>
+      </Label>
    </children>
 </AnchorPane>
