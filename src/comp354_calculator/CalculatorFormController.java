@@ -3,6 +3,7 @@ package comp354_calculator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -16,6 +17,7 @@ public class CalculatorFormController {
 	private static final String PI = "3.1415926535";
 	private static final String EULER = "2.7182818284";
 	private static final String INPUT_DEGREES = "Degrees";
+	private static final int DECIMAL_PLACE_NUMBER = 9;
 	private static double firstOperand;
 	
 	private enum Operation{Add, Subtract, Div, Mult};
@@ -112,6 +114,9 @@ public class CalculatorFormController {
     private RadioButton degrees;
     
     @FXML
+    private Label smallDisplay;
+    
+    @FXML
     protected void handleButtonAction(ActionEvent event) {
     	if(event.getSource() == zero) {
     		if(display.getText().equals("0")) {
@@ -164,6 +169,7 @@ public class CalculatorFormController {
     	}
     	else if(event.getSource() == clearAll) {
     		display.setText("");
+    		smallDisplay.setText("");
     	}
     	else if(event.getSource() == clear) {
     		String txt = display.getText();
@@ -179,49 +185,62 @@ public class CalculatorFormController {
     	}
     	else if(event.getSource() == plus && display.getText().length() != 0) {
     		firstOperand = Double.parseDouble(display.getText());
+    		smallDisplay.setText(Double.toString(firstOperand) + " + ");
     		executeOperation = Operation.Add;
-    		display.setText(display.getText() + " + ");
+    		display.setText("");
     	}
     	else if(event.getSource() == minus && display.getText().length() != 0) {
     		firstOperand = Double.parseDouble(display.getText());
+    		smallDisplay.setText(Double.toString(firstOperand) + " - ");
     		executeOperation = Operation.Subtract;
-    		display.setText(display.getText() + " - ");
+    		display.setText("");
     	}
     	else if(event.getSource() == divide && display.getText().length() != 0) {
     		firstOperand = Double.parseDouble(display.getText());
+    		smallDisplay.setText(Double.toString(firstOperand) + " / ");
     		executeOperation = Operation.Div;
-    		display.setText(display.getText() + " / ");
+    		display.setText("");
     	}
     	else if(event.getSource() == multiply && display.getText().length() != 0) {
     		firstOperand = Double.parseDouble(display.getText());
+    		smallDisplay.setText(Double.toString(firstOperand) + " * ");
     		executeOperation = Operation.Mult;
-    		display.setText(display.getText() + " * ");
+    		display.setText("");
     	}
     	else if(event.getSource() == equals) {
-    		double secondOperand = CalculatorFormControllerHelper.processOperationInput(
-    				display.getText(), executeOperation);
+    		double secondOperand = Double.parseDouble(display.getText());
+    		Double result = 0.0;
+    		Boolean isException = false;
     		
     		switch(executeOperation) {
     			case Add:
-    				display.setText(Double.toString(firstOperand + secondOperand));
+    				result = firstOperand + secondOperand;
     				break;
     			case Subtract:
-    				display.setText(Double.toString(firstOperand - secondOperand));
+    				result = firstOperand - secondOperand;
     				break;
     			case Div:
     				try {
     					if(Double.compare(secondOperand, 0) == 0) {
     						throw new ArithmeticException();
     					}
-    					display.setText(Double.toString(firstOperand / secondOperand));
+    					result = firstOperand / secondOperand;
     				}
     				catch(ArithmeticException  e){
-    					display.setText("Division by zero");
+    					isException = true;
     				}
     				break;
     			case Mult:
-    				display.setText(Double.toString(firstOperand * secondOperand));
+    				result = firstOperand * secondOperand;
     				break;
+    		}
+    		if(isException) {
+    			smallDisplay.setText("");
+				display.setText("Division by zero");
+    		}
+    		else {
+    			smallDisplay.setText(smallDisplay.getText() + Double.toString(secondOperand));
+        		display.setText(Double.toString(CalcHelper.roundDouble(result, DECIMAL_PLACE_NUMBER)));
     		}
     	}
     	// Transcendental  functions
@@ -230,20 +249,18 @@ public class CalculatorFormController {
     		RadioButton selectedRadioButton = (RadioButton) input_type.getSelectedToggle();
     		String toogleGroupValue = selectedRadioButton.getText();
     		value = Double.parseDouble(display.getText());
-    		
     		value = toogleGroupValue.equals(INPUT_DEGREES) ? Calc.sin(value, true) : Calc.sin(value, false);
-
-    		display.setText(Double.toString(value));
+    		
+    		display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER)));
     	}
     	else if(event.getSource() == sinh) {
     		double value = 0.0;
     		RadioButton selectedRadioButton = (RadioButton) input_type.getSelectedToggle();
     		String toogleGroupValue = selectedRadioButton.getText();
     		value = Double.parseDouble(display.getText());
-    		
     		value = toogleGroupValue.equals(INPUT_DEGREES) ? Calc.sinh(value, true) : Calc.sinh(value, false);
 
-    		display.setText(Double.toString(value));
+    		display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER)));
     	}
     	else if(event.getSource() == e_to_x) {
     		double value = Double.parseDouble(display.getText());;
@@ -251,10 +268,11 @@ public class CalculatorFormController {
     		try {
     			value = Calc.exponential(value);
         		
-        		display.setText(Double.toString(value));
+    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER)));
     		}
     		catch(ArithmeticException e) {
     			display.setText("Infinity");
+    			smallDisplay.setText("");
     		}	
     	}
     	else if(event.getSource() == ten_to_x) {
@@ -262,10 +280,11 @@ public class CalculatorFormController {
 
     		try {
     			value = Calc.decimalExp(value);
-        		
-        		display.setText(Double.toString(value));
+    			
+    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER)));
     		}
     		catch(ArithmeticException e) {
+    			smallDisplay.setText("");
     			display.setText("Infinity");
     		}
     	}
@@ -275,30 +294,12 @@ public class CalculatorFormController {
     		try {
     			value = Calc.sqrt(value);
     			
-    			display.setText(Double.toString(value));
+    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER)));
     		}
     		catch (IllegalArgumentException e){
-    			display.setText("Error");
+    			smallDisplay.setText("");
+    			display.setText("Negative root error");
     		}
-    	}
-    }
-    
-    // Inner class for the form helpers
-    private static class CalculatorFormControllerHelper{
-    	
-    	// Preprocess text for +, -, *, / operations
-    	private static double processOperationInput(String input, Operation oper) {
-    		switch(executeOperation) {
-				case Add:
-					return Double.parseDouble(input.split("\\+")[1].substring(1));
-				case Subtract:
-					return Double.parseDouble(input.split("-")[1].substring(1));
-				case Div:
-					return Double.parseDouble(input.split("/")[1].substring(1));
-				case Mult:
-					return Double.parseDouble(input.split("\\*")[1].substring(1));
-    		}
-    		return 0.0;
     	}
     }
 }

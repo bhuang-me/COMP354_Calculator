@@ -9,7 +9,6 @@ package comp354_calculator;
 /** SUBJECT TO CHANGE */
 public class Calc {
     private static final double PI = 3.14159265359;
-    private static final int DECIMAL_PLACE_NUMBER = 9;
     private static final double ACCURACY = 0.0000000001;
     
     public static double sin (double num, boolean isNumDegree) {
@@ -31,7 +30,7 @@ public class Calc {
     		k += 2;
     	}
     	
-        return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
+        return sum;
     }
 
     public static double sinh (double num, boolean isNumDegree) {
@@ -51,7 +50,7 @@ public class Calc {
             sum += step;
             k += 2;
         }
-        return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
+        return sum;
     }
     
     public static double decimalExp (double power) {
@@ -80,7 +79,7 @@ public class Calc {
 			throw new ArithmeticException("Error 2");
 		}
 		
-		return CalcHelper.roundDouble(sum, DECIMAL_PLACE_NUMBER);
+		return sum;
     }
     
     public static double sqrt(double arg) {
@@ -101,7 +100,7 @@ public class Calc {
             res = (res + arg / res) / 2;
         }
         
-        return CalcHelper.roundDouble(res, DECIMAL_PLACE_NUMBER);
+        return res;
     }
     
     /* Insert an x value and e^x will be calculated through use of the Taylor Series to arrive at an approximate value */
@@ -133,7 +132,7 @@ public class Calc {
 	            throw new ArithmeticException("x value has overloaded system");
 			
 	        else
-	        	return CalcHelper.roundDouble(taylorSum, DECIMAL_PLACE_NUMBER); // Can not use CalcHelper.roundDouble
+	        	return taylorSum;
 		}
 		
 	}
