@@ -48,6 +48,13 @@ public class Calc {
         while (Double.compare(step >= 0 ? step : step * (-1), ACCURACY) > 0){
             step = step * num * num/(k * (k + 1));
             sum += step;
+            
+            if(sum == Double.POSITIVE_INFINITY) {
+        		throw new ArithmeticException("Positive Infinity");
+        	}
+            else if(sum == Double.NEGATIVE_INFINITY) {
+            	throw new ArithmeticException("Negative Infinity");
+            }
             k += 2;
         }
         return sum;
@@ -68,15 +75,15 @@ public class Calc {
 		while(Double.compare(step, accuracy)>0) {
 			step=step*LN10VALUE*power/factorial;
 			sum=sum+step;
+			
+        	if(sum == Double.POSITIVE_INFINITY) {
+        		throw new ArithmeticException("Positive Infinity");
+        	}
 			factorial++;
 		}
 
 		if(temp<0) {
 			sum=1.0/sum;
-		}
-		
-		if(sum>=1.0E100) {
-			throw new ArithmeticException("Error 2");
 		}
 		
 		return sum;
@@ -106,6 +113,11 @@ public class Calc {
     /* Insert an x value and e^x will be calculated through use of the Taylor Series to arrive at an approximate value */
 	public static double exponential(double x)
 	{
+		boolean isNegative = false;
+		if(Double.compare(x, 0.0) < 0) {
+			x *= -1;
+			isNegative = true;
+		}
 		
 		double taylorSum = 1;
 		
@@ -118,21 +130,17 @@ public class Calc {
 			double step = 1;
 			
 			//Taylor series is calculated through looping this equation i times 
-	        while (Double.compare(step >= 0 ? step : step * (-1), ACCURACY) > 0){
+	        while (Double.compare(step, ACCURACY) > 0){
 	        	step = step * x / i;
 	        	taylorSum += step;
+	        	
+	        	if(taylorSum == Double.POSITIVE_INFINITY) {
+	        		throw new ArithmeticException("Positive Infinity");
+	        	}
+	        	System.out.println(step);
 	        	i++;
 	        }
-			
-			//We must include exception handling when the result of the calculation is positive infinity to prevent the computer from running infinitely
-			//which would overflow the system 
-			
-			if(taylorSum == Double.POSITIVE_INFINITY) 
-				
-	            throw new ArithmeticException("x value has overloaded system");
-			
-	        else
-	        	return taylorSum;
+	        return isNegative ? (1.0 / taylorSum) : taylorSum;
 		}
 		
 	}

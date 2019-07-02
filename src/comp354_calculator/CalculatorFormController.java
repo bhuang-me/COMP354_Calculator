@@ -18,10 +18,10 @@ public class CalculatorFormController {
 	private static final String EULER = "2.7182818284";
 	private static final String INPUT_DEGREES = "Degrees";
 	private static final int DECIMAL_PLACE_NUMBER = 9;
-	private static double firstOperand;
+	private static boolean IS_EQUAL_PRESSED = false;
+	private static double operand;
 	
-	private enum Operation{Add, Subtract, Div, Mult};
-	private static Operation  executeOperation;
+	private enum Operation{Add, Subtract, Divide, Multiply};
 	
     @FXML
     private TextField display;
@@ -183,66 +183,39 @@ public class CalculatorFormController {
     	else if(event.getSource() == euler) {
     		display.setText(EULER);
     	}
-    	else if(event.getSource() == plus && display.getText().length() != 0) {
-    		firstOperand = Double.parseDouble(display.getText());
-    		smallDisplay.setText(Double.toString(firstOperand) + " + ");
-    		executeOperation = Operation.Add;
-    		display.setText("");
+    	else if(event.getSource() == plus && !isEmptyDisplay(display)) {
+    		executeMinusPlusDivideMultiply(Operation.Add, display, smallDisplay);
     	}
-    	else if(event.getSource() == minus && display.getText().length() != 0) {
-    		firstOperand = Double.parseDouble(display.getText());
-    		smallDisplay.setText(Double.toString(firstOperand) + " - ");
-    		executeOperation = Operation.Subtract;
-    		display.setText("");
+    	else if(event.getSource() == minus && !isEmptyDisplay(display)) {
+    		executeMinusPlusDivideMultiply(Operation.Subtract, display, smallDisplay);
     	}
-    	else if(event.getSource() == divide && display.getText().length() != 0) {
-    		firstOperand = Double.parseDouble(display.getText());
-    		smallDisplay.setText(Double.toString(firstOperand) + " / ");
-    		executeOperation = Operation.Div;
-    		display.setText("");
+    	else if(event.getSource() == divide && !isEmptyDisplay(display)) {
+    		executeMinusPlusDivideMultiply(Operation.Divide, display, smallDisplay);
     	}
-    	else if(event.getSource() == multiply && display.getText().length() != 0) {
-    		firstOperand = Double.parseDouble(display.getText());
-    		smallDisplay.setText(Double.toString(firstOperand) + " * ");
-    		executeOperation = Operation.Mult;
-    		display.setText("");
+    	else if(event.getSource() == multiply && !isEmptyDisplay(display)) {
+    		executeMinusPlusDivideMultiply(Operation.Multiply, display, smallDisplay);
     	}
-    	else if(event.getSource() == equals) {
-    		double secondOperand = Double.parseDouble(display.getText());
-    		Double result = 0.0;
-    		Boolean isException = false;
-    		
-    		switch(executeOperation) {
-    			case Add:
-    				result = firstOperand + secondOperand;
-    				break;
-    			case Subtract:
-    				result = firstOperand - secondOperand;
-    				break;
-    			case Div:
-    				try {
-    					if(Double.compare(secondOperand, 0) == 0) {
-    						throw new ArithmeticException();
-    					}
-    					result = firstOperand / secondOperand;
-    				}
-    				catch(ArithmeticException  e){
-    					isException = true;
-    				}
-    				break;
-    			case Mult:
-    				result = firstOperand * secondOperand;
-    				break;
-    		}
-    		if(isException) {
-    			smallDisplay.setText("");
-				display.setText("Division by zero");
+    	else if(event.getSource() == equals && !isEmptyDisplay(display)) {
+    		if(IS_EQUAL_PRESSED) {
+    			smallDisplay.setText(display.getText());
     		}
     		else {
-    			smallDisplay.setText(smallDisplay.getText() + Double.toString(secondOperand));
-        		display.setText(Double.toString(CalcHelper.roundDouble(result, DECIMAL_PLACE_NUMBER)));
+        		operand = Double.parseDouble(display.getText());
+        		smallDisplay.setText(smallDisplay.getText() + Double.toString(operand));
+        		
+        		try {
+        			Double result = CalcHelper.evaluateExpression(smallDisplay.getText());
+        			
+            		display.setText(Double.toString(CalcHelper.roundDouble(result, DECIMAL_PLACE_NUMBER, false)));
+        		}
+        		catch(ArithmeticException e){
+        			smallDisplay.setText("");
+    				display.setText("Division by zero");
+        		}
     		}
+    		IS_EQUAL_PRESSED = true;
     	}
+    	
     	// Transcendental  functions
     	else if(event.getSource() == sin) {
     		double value = 0.0;
@@ -251,16 +224,26 @@ public class CalculatorFormController {
     		value = Double.parseDouble(display.getText());
     		value = toogleGroupValue.equals(INPUT_DEGREES) ? Calc.sin(value, true) : Calc.sin(value, false);
     		
-    		display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER)));
+    		display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER, true)));
     	}
     	else if(event.getSource() == sinh) {
     		double value = 0.0;
     		RadioButton selectedRadioButton = (RadioButton) input_type.getSelectedToggle();
     		String toogleGroupValue = selectedRadioButton.getText();
     		value = Double.parseDouble(display.getText());
-    		value = toogleGroupValue.equals(INPUT_DEGREES) ? Calc.sinh(value, true) : Calc.sinh(value, false);
-
-    		display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER)));
+    		try {
+    			value = toogleGroupValue.equals(INPUT_DEGREES) ? Calc.sinh(value, true) : Calc.sinh(value, false);
+    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
+    		}
+    		catch(ArithmeticException e) {
+    			if(e.getMessage().equals("Positive Infinity")) {
+    				display.setText("Positive Infinity");
+    			}
+    			else if(e.getMessage().equals("Negative Infinity")) {
+    				display.setText("Negative Infinity");
+    			}
+    			smallDisplay.setText("");
+    		}	
     	}
     	else if(event.getSource() == e_to_x) {
     		double value = Double.parseDouble(display.getText());;
@@ -268,10 +251,12 @@ public class CalculatorFormController {
     		try {
     			value = Calc.exponential(value);
         		
-    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER)));
+    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		}
     		catch(ArithmeticException e) {
-    			display.setText("Infinity");
+    			if(e.getMessage().equals("Positive Infinity")) {
+    				display.setText("Positive Infinity");
+    			}
     			smallDisplay.setText("");
     		}	
     	}
@@ -281,11 +266,13 @@ public class CalculatorFormController {
     		try {
     			value = Calc.decimalExp(value);
     			
-    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER)));
+    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		}
     		catch(ArithmeticException e) {
+    			if(e.getMessage().equals("Positive Infinity")) {
+    				display.setText("Positive Infinity");
+    			}
     			smallDisplay.setText("");
-    			display.setText("Infinity");
     		}
     	}
     	else if(event.getSource() == root_of_x) {
@@ -294,12 +281,42 @@ public class CalculatorFormController {
     		try {
     			value = Calc.sqrt(value);
     			
-    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER)));
+    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		}
     		catch (IllegalArgumentException e){
     			smallDisplay.setText("");
     			display.setText("Negative root error");
     		}
     	}
+    }
+    
+    // Functionality for +, -, /, * buttons
+    private static void executeMinusPlusDivideMultiply(Operation op, TextField display, Label smallDisplay) {
+    	operand = Double.parseDouble(display.getText());
+    	
+    	// Clear small display if operation follows *Equal* button
+    	if(IS_EQUAL_PRESSED) {
+    		smallDisplay.setText("");
+    		IS_EQUAL_PRESSED = false;
+    	}
+    	
+		switch(op) {
+			case Add:
+				smallDisplay.setText(smallDisplay.getText() + Double.toString(operand) + " + ");
+				break;
+			case Subtract:
+				smallDisplay.setText(smallDisplay.getText() + Double.toString(operand) + " - ");
+				break;
+			case Divide:
+				smallDisplay.setText(smallDisplay.getText() + Double.toString(operand) + " / ");
+				break;
+			case Multiply:
+				smallDisplay.setText(smallDisplay.getText() + Double.toString(operand) + " * ");
+				break;
+			}
+		display.setText("");
+    }
+    private static boolean isEmptyDisplay(TextField display) {
+    	return display.getText().length() == 0;
     }
 }
