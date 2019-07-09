@@ -9,29 +9,35 @@ package comp354_calculator;
 
 /**
  * This class contains the implementations of the five transcendental functions of Team B's ETERNITY Calculator. 
- * Name of class subject to change.
  * 
  * @version
  * 		2 05 Aug 2019 @author Team B
  */
 public class Calc {
+	
+	/**
+	 	Constant value of PI */
 	private static final double PI = 3.14159265359;
+	
+	/** 
+	 	Constant serves as a stopping condition for the Taylor Series approximation */
 	private static final double ACCURACY = 0.0000000001;
 
 	public static double sin(double num, boolean isNumDegree) {
-		// Convert to Radian if inout is in Degrees
+		
+		/* Convert to Radian if inout is in Degrees */
 		if (isNumDegree) {
 			num = num * PI / 180;
 		}
 		
-		// convert x to the period from 0 to 360 degrees (0 to 2 * PI rad)
+		/* Convert x to the period from 0 to 360 degrees (0 to 2 * PI rad) */
 		num = num % (2 * PI);
 		double sum = num;
 		double step = num;
 
-		// Compute until the value of step is smaller than 9 decimal places
+		/* Compute until the value of step is smaller than 9 decimal places */
 		int k = 2;
-		while (Double.compare(step >= 0 ? step : step * (-1), ACCURACY) > 0) {
+		while (Double.compare((step >= 0 ? step : step * (-1)), ACCURACY) > 0) {
 			step = (-1) * step * num * num / (k * (k + 1));
 			sum += step;
 			k += 2;
