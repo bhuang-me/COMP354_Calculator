@@ -25,7 +25,7 @@ public class CalculateTransFunctions {
 
 	public static double sin(double num, boolean isNumDegree) {
 		
-		/* Convert to Radian if inout is in Degrees */
+		/* Convert to Radian if input is in Degrees */
 		if (isNumDegree) {
 			num = num * PI / 180;
 		}
@@ -48,7 +48,7 @@ public class CalculateTransFunctions {
 
 	public static double sinh(double num, boolean isNumDegree) {
 
-		// Convert to Radian if inout is in Degrees
+		/* Convert to Radian if input is in Degrees */
 		if (isNumDegree) {
 			num = num * PI / 180;
 		}
@@ -101,8 +101,15 @@ public class CalculateTransFunctions {
 		return sum;
 	}
 
+        /*
+        * Calculates the square root of a number using the Babylonian method.
+	* @param res and arg/res are overestimates and underestimates
+        * @param guess is a correction brought to our previous estimate
+        * @param arg is the argument that we wish to calculate the root for
+	* The closer the estimates are, the better the next guess will be.
+	*/
 	public static double sqrt(double arg) {
-		/* Calculates the square root of a number using the Babylonian method */
+		
 		if (arg < 0) {
 			throw new IllegalArgumentException("Cannot calculate negative square roots.");
 		} else if (arg == 0) {
@@ -110,12 +117,8 @@ public class CalculateTransFunctions {
 		}
 		double guess = 0.0;
 		double res = 1.0;
-		/*
-		 * res and arg/res are overestimates and underestimates (or vice versa) for the
-		 * root of arg The closer the estimates are, the better the next guess will be.
-		 * We loop this algorithm until we converge to the true root (or when the
-		 * difference between the guess and result is lower than a certain amount)
-		 */
+
+                //Loop until we converge to the true root
 		while (res != guess) {
 			guess = res;
 			res = (res + arg / res) / 2;
