@@ -209,9 +209,9 @@ public class CalculatorFormController {
         		smallDisplay.setText(smallDisplay.getText() + Double.toString(operand));
         		
         		try {
-        			Double result = CalcHelper.evaluateExpression(smallDisplay.getText());
+        			Double result = NumberAdjuster.evaluateExpression(smallDisplay.getText());
         			
-            		display.setText(Double.toString(CalcHelper.roundDouble(result, DECIMAL_PLACE_NUMBER, false)));
+            		display.setText(Double.toString(NumberAdjuster.roundDouble(result, DECIMAL_PLACE_NUMBER, false)));
         		} catch(ArithmeticException e){
         			smallDisplay.setText("");
     				display.setText("Division by zero");
@@ -223,17 +223,19 @@ public class CalculatorFormController {
     		RadioButton selectedRadioButton = (RadioButton) input_type.getSelectedToggle();
     		String toogleGroupValue = selectedRadioButton.getText();
     		value = Double.parseDouble(display.getText());
-    		value = toogleGroupValue.equals(INPUT_DEGREES) ? Calc.sin(value, true) : Calc.sin(value, false);
+    		value = toogleGroupValue.equals(INPUT_DEGREES) ? 
+    				CalculateTransFunctions.sin(value, true) : CalculateTransFunctions.sin(value, false);
     		
-    		display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER, true)));
+    		display.setText(Double.toString(NumberAdjuster.roundDouble(value, DECIMAL_PLACE_NUMBER, true)));
     	} else if(event.getSource() == sinh) {
     		double value = 0.0;
     		RadioButton selectedRadioButton = (RadioButton) input_type.getSelectedToggle();
     		String toogleGroupValue = selectedRadioButton.getText();
     		value = Double.parseDouble(display.getText());
     		try {
-    			value = toogleGroupValue.equals(INPUT_DEGREES) ? Calc.sinh(value, true) : Calc.sinh(value, false);
-    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
+    			value = toogleGroupValue.equals(INPUT_DEGREES) ? 
+    					CalculateTransFunctions.sinh(value, true) : CalculateTransFunctions.sinh(value, false);
+    			display.setText(Double.toString(NumberAdjuster.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		} catch(ArithmeticException e) {
     			if(e.getMessage().equals("Positive Infinity")) {
     				display.setText("Positive Infinity");
@@ -246,9 +248,9 @@ public class CalculatorFormController {
     		double value = Double.parseDouble(display.getText());;
     		
     		try {
-    			value = Calc.exponential(value);
+    			value = CalculateTransFunctions.exponential(value);
         		
-    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
+    			display.setText(Double.toString(NumberAdjuster.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		} catch(ArithmeticException e) {
     			if(e.getMessage().equals("Positive Infinity")) {
     				display.setText("Positive Infinity");
@@ -259,9 +261,9 @@ public class CalculatorFormController {
     		double value = Double.parseDouble(display.getText());
 
     		try {
-    			value = Calc.decimalExp(value);
+    			value = CalculateTransFunctions.decimalExp(value);
     			
-    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
+    			display.setText(Double.toString(NumberAdjuster.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		} catch(ArithmeticException e) {
     			if(e.getMessage().equals("Positive Infinity")) {
     				display.setText("Positive Infinity");
@@ -272,9 +274,9 @@ public class CalculatorFormController {
     		double value = Double.parseDouble(display.getText());;
     		
     		try {
-    			value = Calc.sqrt(value);
+    			value = CalculateTransFunctions.sqrt(value);
     			
-    			display.setText(Double.toString(CalcHelper.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
+    			display.setText(Double.toString(NumberAdjuster.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		} catch (IllegalArgumentException e){
     			smallDisplay.setText("");
     			display.setText("Negative root error");

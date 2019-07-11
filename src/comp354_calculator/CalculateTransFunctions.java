@@ -13,7 +13,7 @@ package comp354_calculator;
  * @version
  * 		2 05 Aug 2019 @author Team B
  */
-public class Calc {
+public class CalculateTransFunctions {
 	
 	/**
 	 	Constant value of PI */

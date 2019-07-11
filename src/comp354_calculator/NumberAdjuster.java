@@ -20,7 +20,7 @@ import java.math.RoundingMode;
  * @version
  * 		2 05 Aug 2019 @author Team B
  */
-public class CalcHelper {
+public class NumberAdjuster {
 	
 	/**
 	 	Constant value for the scientific notation processing */

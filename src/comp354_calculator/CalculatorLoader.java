@@ -15,7 +15,7 @@ import javafx.stage.Stage;
  *
  * @author b_hua
  */
-public class COMP354_Calculator extends Application {
+public class CalculatorLoader extends Application {
     
     @Override
     public void start(Stage primaryStage) throws Exception{
