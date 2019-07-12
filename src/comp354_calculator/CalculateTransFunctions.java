@@ -56,8 +56,8 @@ public class CalculateTransFunctions {
 		double sum = num;
 		double step = num;
 
+		/* Compute until the value of step is smaller than 9 decimal places */
 		int k = 2;
-
 		while (Double.compare(step >= 0 ? step : step * (-1), ACCURACY) > 0) {
 			step = step * num * num / (k * (k + 1));
 			sum += step;
@@ -69,6 +69,7 @@ public class CalculateTransFunctions {
 			}
 			k += 2;
 		}
+		
 		return sum;
 	}
 
