@@ -72,7 +72,12 @@ public class CalculateTransFunctions {
 		
 		return sum;
 	}
+	
 
+	/*
+	 * Calculates 10 to the power of a given exponent through the use of its Taylor Series	
+	 * @param power is the value of the exponent in the calculation
+	 */
 	public static double decimalExp(double power) {
 		double sum = 1;
 		double step = 1;
@@ -80,21 +85,25 @@ public class CalculateTransFunctions {
 		final double LN10VALUE = 2.302585092994046;
 		double accuracy = 0.0000000001;
 		double temp = power;
-
+		
+		/*Checks if the power was negative and converts the power to a positive number*/
 		if (temp < 0) {
 			power *= -1;
 		}
-
+		
+		/*Calculates the taylor series until the step is less than 9 decimal places*/
 		while (Double.compare(step, accuracy) > 0) {
 			step = step * LN10VALUE * power / factorial;
 			sum = sum + step;
-
+			
+			/*Throws an exception if the sum is already recognized as positive infinity*/
 			if (sum == Double.POSITIVE_INFINITY) {
 				throw new ArithmeticException("Positive Infinity");
 			}
 			factorial++;
 		}
-
+		
+		/*Adjusts sum to its expected value if the power was initially negative*/
 		if (temp < 0) {
 			sum = 1.0 / sum;
 		}
