@@ -40,7 +40,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="dot" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="83.0" prefWidth="112.0" text="." GridPane.columnIndex="2" GridPane.rowIndex="5">
+            <Button styleClass="numpad" fx:id="dot" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="83.0" prefWidth="112.0" text="." GridPane.columnIndex="2" GridPane.rowIndex="5">
                <font>
                   <Font size="23.0" />
                </font>
