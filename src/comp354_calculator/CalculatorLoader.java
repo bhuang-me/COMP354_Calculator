@@ -22,6 +22,7 @@ public class CalculatorLoader extends Application {
     	
     	Parent root = FXMLLoader.load(getClass().getResource("CalculatorForm.fxml"));
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("comp354_calculator/CalculatorStyle.css");
         
         primaryStage.setTitle("Calculator (Team B)");
         primaryStage.setScene(scene);

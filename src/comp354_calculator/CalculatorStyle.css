@@ -1,0 +1,26 @@
+.root {
+    -fx-background-color: rgb(23, 23, 23);
+    -fx-text-fill: white;
+}
+
+.text-field {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-border-color: rgb(77, 77, 77);
+}
+
+.button {
+    -fx-background-color: rgb(23, 23, 23);
+    -fx-text-fill: white;
+    -fx-border-color: rgb(77, 77, 77);
+}
+
+.button:hover {
+    -fx-background-color: rgb(51, 51, 51);
+    -fx-border-color: rgb(102, 102, 102);
+}
+
+.radio-button {
+    -fx-text-fill: white;
+}
+    
