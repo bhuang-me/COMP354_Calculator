@@ -7,6 +7,11 @@
 
 package comp354_calculator;
 
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -48,10 +53,24 @@ public class CalculatorFormController {
 	 	Keep track of the last operation event */
 	private static double operand;
 	
-	/**
-	 	Enum for basic operation*/
-	private enum Operation{Add, Subtract, Divide, Multiply};
+    /**
+ 	Enum operators with precedence*/
+	private enum Operation{
+		Add(1), Subtract(2), Multiply(3), Divide(4);
+		final int precedence;
+		Operation(int p) { precedence = p; }
+		Operation(){ precedence = 0;}
+	}
 	
+	/**
+ 	Map of operators*/
+    private static Map<String, Operation> ops = new HashMap<String, Operation>() {{
+    	put("+", Operation.Add);
+    	put("-", Operation.Subtract);
+    	put("*", Operation.Multiply);
+    	put("/", Operation.Divide);
+    }};
+    
     @FXML
     private TextField display;
 
@@ -209,9 +228,9 @@ public class CalculatorFormController {
         		smallDisplay.setText(smallDisplay.getText() + Double.toString(operand));
         		
         		try {
-        			Double result = NumberAdjuster.evaluateExpression(smallDisplay.getText());
+        			Double result = CalculateFunctions.evalRPN(postfix(smallDisplay.getText()));
         			
-            		display.setText(Double.toString(NumberAdjuster.roundDouble(result, DECIMAL_PLACE_NUMBER, false)));
+            		display.setText(Double.toString(CalculateFunctions.roundDouble(result, DECIMAL_PLACE_NUMBER, false)));
         		} catch(ArithmeticException e){
         			smallDisplay.setText("");
     				display.setText("Division by zero");
@@ -224,9 +243,9 @@ public class CalculatorFormController {
     		String toogleGroupValue = selectedRadioButton.getText();
     		value = Double.parseDouble(display.getText());
     		value = toogleGroupValue.equals(INPUT_DEGREES) ? 
-    				CalculateTransFunctions.sin(value, true) : CalculateTransFunctions.sin(value, false);
+    				CalculateFunctions.sin(value, true) : CalculateFunctions.sin(value, false);
     		
-    		display.setText(Double.toString(NumberAdjuster.roundDouble(value, DECIMAL_PLACE_NUMBER, true)));
+    		display.setText(Double.toString(CalculateFunctions.roundDouble(value, DECIMAL_PLACE_NUMBER, true)));
     	} else if(event.getSource() == sinh) {
     		double value = 0.0;
     		RadioButton selectedRadioButton = (RadioButton) input_type.getSelectedToggle();
@@ -234,8 +253,8 @@ public class CalculatorFormController {
     		value = Double.parseDouble(display.getText());
     		try {
     			value = toogleGroupValue.equals(INPUT_DEGREES) ? 
-    					CalculateTransFunctions.sinh(value, true) : CalculateTransFunctions.sinh(value, false);
-    			display.setText(Double.toString(NumberAdjuster.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
+    					CalculateFunctions.sinh(value, true) : CalculateFunctions.sinh(value, false);
+    			display.setText(Double.toString(CalculateFunctions.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		} catch(ArithmeticException e) {
     			if(e.getMessage().equals("Positive Infinity")) {
     				display.setText("Positive Infinity");
@@ -248,9 +267,9 @@ public class CalculatorFormController {
     		double value = Double.parseDouble(display.getText());;
     		
     		try {
-    			value = CalculateTransFunctions.exponential(value);
+    			value = CalculateFunctions.exponential(value);
         		
-    			display.setText(Double.toString(NumberAdjuster.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
+    			display.setText(Double.toString(CalculateFunctions.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		} catch(ArithmeticException e) {
     			if(e.getMessage().equals("Positive Infinity")) {
     				display.setText("Positive Infinity");
@@ -261,9 +280,9 @@ public class CalculatorFormController {
     		double value = Double.parseDouble(display.getText());
 
     		try {
-    			value = CalculateTransFunctions.decimalExp(value);
+    			value = CalculateFunctions.decimalExp(value);
     			
-    			display.setText(Double.toString(NumberAdjuster.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
+    			display.setText(Double.toString(CalculateFunctions.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		} catch(ArithmeticException e) {
     			if(e.getMessage().equals("Positive Infinity")) {
     				display.setText("Positive Infinity");
@@ -274,9 +293,9 @@ public class CalculatorFormController {
     		double value = Double.parseDouble(display.getText());;
     		
     		try {
-    			value = CalculateTransFunctions.sqrt(value);
+    			value = CalculateFunctions.sqrt(value);
     			
-    			display.setText(Double.toString(NumberAdjuster.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
+    			display.setText(Double.toString(CalculateFunctions.roundDouble(value, DECIMAL_PLACE_NUMBER, false)));
     		} catch (IllegalArgumentException e){
     			smallDisplay.setText("");
     			display.setText("Negative root error");
@@ -314,6 +333,47 @@ public class CalculatorFormController {
 			break;
 		}
 		display.setText("");
+    }
+    
+    /**
+     * Convert input from infix to postfix notation
+     * @param Expression in infix notation
+     * @return Returns expression in postfix notation 
+     */
+    private static String[] postfix(String infix)
+    {
+        StringBuilder output = new StringBuilder();
+        Deque<String> stack  = new LinkedList<>();
+
+        for (String token : infix.split("\\s")) {
+            
+        	/* Process operator */
+            if (ops.containsKey(token)) {
+                while ( ! stack.isEmpty() && isHigerPrecision(token, stack.peek()))
+                    output.append(stack.pop()).append(' ');
+                stack.push(token);
+
+            /* Process digit */
+            } else {
+                output.append(token).append(' ');
+            }
+        }
+
+        while ( ! stack.isEmpty()) {
+        	output.append(stack.pop()).append(' ');
+        }
+          
+        return output.toString().split("\\s");
+    }
+
+    /**
+     * Compare precedence of operators
+     * @param op Operator one
+     * @param sub Operator two
+     * @return Returns true if second operator has higher precedence; false otherwise
+     */
+    private static boolean isHigerPrecision(String op, String sub){
+        return (ops.containsKey(sub) && ops.get(sub).precedence >= ops.get(op).precedence);
     }
     
     /**
