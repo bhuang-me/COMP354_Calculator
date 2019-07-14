@@ -7,22 +7,38 @@
 
 package comp354_calculator;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Deque;
+import java.util.LinkedList;
+
 /**
  * This class contains the implementations of the five transcendental functions of Team B's ETERNITY Calculator. 
  * 
  * @version
  * 		2 05 Aug 2019 @author Team B
  */
-public class CalculateTransFunctions {
+public class CalculateFunctions {
 	
 	/**
 	 	Constant value of PI */
 	private static final double PI = 3.14159265359;
 	
+	/**
+ 		Constant value for the scientific notation processing */
+	private static final char SCIENTIFIC_NOTATION_E = 'E';
+
 	/** 
 	 	Constant serves as a stopping condition for the Taylor Series approximation */
 	private static final double ACCURACY = 0.0000000001;
 
+	
+	/**
+	 * Evaluate sin(x) of the input
+	 * @param num Value to evaluate
+	 * @param isNumDegree Indicates if input is in DEG or RAD
+	 * @return returns sin value of the num
+	 */
 	public static double sin(double num, boolean isNumDegree) {
 		
 		/* Convert to Radian if input is in Degrees */
@@ -46,6 +62,13 @@ public class CalculateTransFunctions {
 		return sum;
 	}
 
+	/**
+	 * Evaluate sinh(x) of the input
+	 * @param num Value to evaluate
+	 * @param isNumDegree Indicates if input is in DEG or RAD
+	 * @return returns sinh value of the num
+	 * @throws ArithmeticException if input is Positive or Negative infinity
+	 */
 	public static double sinh(double num, boolean isNumDegree) {
 
 		/* Convert to Radian if input is in Degrees */
@@ -174,4 +197,100 @@ public class CalculateTransFunctions {
 			return (isNegative ? (1.0 / taylorSum) : taylorSum);
 		}
 	}
+    
+    /**
+     * Evaluate Reverse-Polish notation
+     * @param tokens Array of tokens
+     * @return Return result of the tokens
+     * @throws Throws ArithmeticException for division by zero
+     */
+    public static double evalRPN(String[] tokens) {
+        Deque<Double> deque = new LinkedList<>();
+        
+        for (String s: tokens) {
+            if (s.equals("*") || s.equals("/") || s.equals("+") || s.equals("-")) {
+            	double right = deque.removeFirst();
+            	double left = deque.removeFirst();
+                
+                if (s.equals("*")) {
+                    deque.addFirst(left * right);
+                }
+                if (s.equals("/")) {
+                	if(Double.compare(right, 0.0) == 0) {
+                		throw new ArithmeticException();
+                	} else {
+                		deque.addFirst(left / right);
+                	}   
+                }
+                
+                if (s.equals("+")) {
+                    deque.addFirst(left + right);
+                }
+                
+                if (s.equals("-")) {
+                    deque.addFirst(left - right);
+                }
+                
+            } else {
+                deque.addFirst(Double.valueOf(s));
+            }
+        }
+        return deque.peekFirst();
+    }
+    
+    /**
+     * Round value to some specific number of decimal places or convert to scientific notation.
+     * Special processing for Sin(x).
+     * Calling Sin(PI) must yield 0, instead of very small accurate value.
+     * @param value Value to round
+     * @param places Number of places after the decimal
+     * @param isSin Indication if rounding needs to be applied on sin
+     * @return Returns Value with the proper rounding
+     */
+    public static double roundDouble(double value, int places, boolean isSin) {
+        if (places < 0) {
+        	throw new IllegalArgumentException();
+        }
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        
+        if(isSin) {
+        	return bd.doubleValue();
+        } else {
+        	return (isInputScientific(value) ? 
+            		processScientificNotation(value, places) : bd.doubleValue());
+        }
+    }
+    
+    /**
+     * Reduce number of decimal places in scientific notation
+     * @param number Value in scientific notation
+     * @param maxLength Maximum number of values after decimal place
+     * @return Returns rounded scientific notation
+     */
+    private static double processScientificNotation(double number, int maxLength) {
+	    
+	      String out = null;
+		   
+	      for (int i = 0; i < maxLength; i++) 
+	      {
+	         String format = "%." + i + "G";
+	         out = String.format(format, number);
+	      }
+		   
+	      return Double.parseDouble(out);
+    }
+    
+    /**
+     * Verify if input is in scientific notation.
+     * Check if it contains 'E' character
+     * @param input Value
+     * @return Returns true if scientific; false otherwise
+     */
+    private static boolean isInputScientific(double input) {
+    	String inputStr = Double.toString(input);
+    	return inputStr.indexOf(SCIENTIFIC_NOTATION_E) > 0;
+    }
+	
 }
