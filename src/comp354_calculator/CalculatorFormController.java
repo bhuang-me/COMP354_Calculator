@@ -1,5 +1,5 @@
 /*
- * @(#)Calc.java	2 05/08/19
+ * @(#)CalculatorFormController.java	2 05/08/19
  * 
  * Copyright (c) 2019-2020 Team B, Comp 354
  * All rights reserved. 
@@ -220,7 +220,12 @@ public class CalculatorFormController {
     		executeMinusPlusDivideMultiply(Operation.Divide, display, smallDisplay);
     	} else if(event.getSource() == multiply && !isEmptyDisplay(display)) {
     		executeMinusPlusDivideMultiply(Operation.Multiply, display, smallDisplay);
-    	} else if(event.getSource() == equals && !isEmptyDisplay(display)) {
+    	}
+    	/**
+    	 * Process input string from the small display.
+    	 * Set boolean IS_EQUAL_PRESSED equal true, to signal that small display can be cleared.
+    	 */
+    	else if(event.getSource() == equals && !isEmptyDisplay(display)) {
     		if(IS_EQUAL_PRESSED) {
     			smallDisplay.setText(display.getText());
     		} else {
