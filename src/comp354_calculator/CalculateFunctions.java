@@ -1,5 +1,5 @@
 /*
- * @(#)Calc.java	2 05/08/19
+ * @(#)CalculateFunctions.java	2 05/08/19
  * 
  * Copyright (c) 2019-2020 Team B, Comp 354
  * All rights reserved. 
@@ -191,7 +191,6 @@ public class CalculateFunctions {
 					throw new ArithmeticException("Positive Infinity");
 				}
 				
-				System.out.println(step);
 				i++;
 			}
 			return (isNegative ? (1.0 / taylorSum) : taylorSum);
